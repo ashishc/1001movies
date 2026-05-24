@@ -2,6 +2,9 @@
   "name": "1001movies",
   "version": "0.1.0",
   "private": true,
+  "engines": {
+    "node": ">=18.18.0"
+  },
   "scripts": {
     "dev": "env -u TURBOPACK -u NODE_ENV next dev",
     "build": "env -u TURBOPACK -u NODE_ENV next build && node scripts/build-sitemap.mjs && node scripts/build-og.mjs",
@@ -22,6 +25,7 @@
     "autoprefixer": "^10.4.20",
     "postcss": "^8.4.47",
     "tailwindcss": "^3.4.13",
-    "typescript": "^5.6.3"
+    "typescript": "^5.6.3",
+    "wrangler": "^4.47.0"
   }
 }
