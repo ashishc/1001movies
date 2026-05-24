@@ -7,6 +7,38 @@ const KEY_ONBOARDED = '1001m:onboarded:v1';
 const KEY_MILESTONES = '1001m:milestones:v1';
 const KEY_LAST_TICK = '1001m:last-tick:v1'; // ISO date strings of week-Mondays
 const KEY_GOAL = '1001m:goal:v1'; // yearly goal count
+const KEY_FILTERS = '1001m:filters:v1'; // last-picked decade/genre/hide-watched
+
+export type SavedFilters = {
+  decade: number | 'all';
+  genre: string;
+  hideWatched: boolean;
+};
+
+export function loadFilters(): SavedFilters | null {
+  if (typeof window === 'undefined') return null;
+  try {
+    const raw = window.localStorage.getItem(KEY_FILTERS);
+    if (!raw) return null;
+    const parsed = JSON.parse(raw);
+    // Be defensive — anything written by an older version of the app might be malformed.
+    const decade = parsed.decade === 'all' || typeof parsed.decade === 'number' ? parsed.decade : 'all';
+    const genre = typeof parsed.genre === 'string' ? parsed.genre : 'all';
+    const hideWatched = typeof parsed.hideWatched === 'boolean' ? parsed.hideWatched : false;
+    return { decade, genre, hideWatched };
+  } catch {
+    return null;
+  }
+}
+
+export function saveFilters(f: SavedFilters) {
+  if (typeof window === 'undefined') return;
+  try {
+    window.localStorage.setItem(KEY_FILTERS, JSON.stringify(f));
+  } catch {
+    /* quota exceeded — ignore */
+  }
+}
 
 export function loadWatched(): Set<string> {
   if (typeof window === 'undefined') return new Set();

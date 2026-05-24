@@ -9,7 +9,6 @@ type Props = {
 };
 
 function runtimeMinutes(s: string): number {
-  // "2h 14m" -> 134; "1h 30m" -> 90; "0h 5m" -> 5
   const h = /(\d+)h/.exec(s);
   const m = /(\d+)m/.exec(s);
   return (h ? parseInt(h[1], 10) * 60 : 0) + (m ? parseInt(m[1], 10) : 0);
@@ -17,11 +16,12 @@ function runtimeMinutes(s: string): number {
 
 export function UpNext({ movies, watched, onToggle }: Props) {
   const picks = useMemo(() => {
-    const candidates = movies
-      .filter((m) => !watched.has(m.id) && runtimeMinutes(m.runtime) >= 60) // skip dataset noise
-      .map((m) => ({ m, mins: runtimeMinutes(m.runtime) }))
-      .sort((a, b) => a.mins - b.mins);
-    return candidates.slice(0, 3);
+    // Most recent unwatched first — recent films are recognisable on landing
+    // and reduce decision friction ("oh, that's still on my list").
+    return movies
+      .filter((m) => !watched.has(m.id) && runtimeMinutes(m.runtime) >= 60)
+      .sort((a, b) => b.year - a.year || a.title.localeCompare(b.title))
+      .slice(0, 3);
   }, [movies, watched]);
 
   if (!picks.length) return null;
@@ -30,10 +30,10 @@ export function UpNext({ movies, watched, onToggle }: Props) {
     <section className="mb-8 rounded-xl border border-[var(--line)] bg-black/[0.02] p-4 sm:p-5 dark:bg-white/[0.03]">
       <div className="mb-3 flex items-baseline justify-between">
         <h2 className="font-display text-lg font-semibold">Up next</h2>
-        <p className="text-xs text-[var(--muted)]">Shortest you haven't watched</p>
+        <p className="text-xs text-[var(--muted)]">Recent films you haven't watched</p>
       </div>
       <div className="grid grid-cols-1 gap-2 sm:grid-cols-3 sm:gap-3">
-        {picks.map(({ m, mins }) => (
+        {picks.map((m) => (
           <button
             key={m.id}
             onClick={() => onToggle(m.id)}
@@ -50,7 +50,7 @@ export function UpNext({ movies, watched, onToggle }: Props) {
                 {m.title}
               </p>
               <p className="mt-0.5 truncate text-[11px] text-[var(--muted)]">
-                {mins}m · {m.year} · {m.director}
+                {m.year} · {m.director}
               </p>
             </div>
           </button>

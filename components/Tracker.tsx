@@ -10,6 +10,8 @@ import {
   findNewlyCrossedMilestone,
   recordCelebratedMilestone,
   bumpStreak,
+  loadFilters,
+  saveFilters,
 } from '@/lib/storage';
 import { estimatePercentile } from '@/lib/constants';
 import { ProgressRing } from './ProgressRing';
@@ -57,8 +59,24 @@ export default function Tracker({ movies }: Props) {
       setWatched(stored);
     }
     prevWatchedSize.current = stored.size;
+
+    // Restore last-picked filters so returning users land where they left off.
+    const f = loadFilters();
+    if (f) {
+      setDecade(f.decade);
+      setGenre(f.genre);
+      setHideWatched(f.hideWatched);
+    }
+
     setHydrated(true);
   }, [movies]);
+
+  // Persist filter choices on every change (only after hydration to avoid stomping
+  // saved values with the initial defaults).
+  useEffect(() => {
+    if (!hydrated) return;
+    saveFilters({ decade, genre, hideWatched });
+  }, [decade, genre, hideWatched, hydrated]);
 
   // Persist + check for milestone crossings whenever the watched set changes.
   useEffect(() => {
