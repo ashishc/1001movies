@@ -62,7 +62,8 @@ export default function StatsClient({ movies }: Props) {
 
   const decadeRows = Object.keys(stats.decadeCounts)
     .map(Number)
-    .sort((a, b) => a - b);
+    // Newest first to match the tracker.
+    .sort((a, b) => b - a);
   const genreRows = Object.entries(stats.genreCounts)
     .filter(([, v]) => v.total > 0)
     .sort((a, b) => b[1].watched - a[1].watched);

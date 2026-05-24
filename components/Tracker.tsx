@@ -22,7 +22,8 @@ import { ShareModal } from './ShareModal';
 
 type Props = { movies: Movie[] };
 
-const ALL_DECADES = [1900, 1910, 1920, 1930, 1940, 1950, 1960, 1970, 1980, 1990, 2000, 2010, 2020];
+// Newest first to match the grid's newest-first sort.
+const ALL_DECADES = [2020, 2010, 2000, 1990, 1980, 1970, 1960, 1950, 1940, 1930, 1920, 1910, 1900];
 
 export default function Tracker({ movies }: Props) {
   const [watched, setWatched] = useState<Set<string>>(() => new Set());
@@ -79,13 +80,17 @@ export default function Tracker({ movies }: Props) {
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
-    return movies.filter((m) => {
-      if (decade !== 'all' && (m.year < decade || m.year >= decade + 10)) return false;
-      if (genre !== 'all' && m.genre !== genre) return false;
-      if (hideWatched && watched.has(m.id)) return false;
-      if (q && !`${m.title} ${m.director}`.toLowerCase().includes(q)) return false;
-      return true;
-    });
+    return movies
+      .filter((m) => {
+        if (decade !== 'all' && (m.year < decade || m.year >= decade + 10)) return false;
+        if (genre !== 'all' && m.genre !== genre) return false;
+        if (hideWatched && watched.has(m.id)) return false;
+        if (q && !`${m.title} ${m.director}`.toLowerCase().includes(q)) return false;
+        return true;
+      })
+      // Newest first — recent films feel current and recognisable on landing.
+      // Within the same year, fall back to title for stable ordering.
+      .sort((a, b) => b.year - a.year || a.title.localeCompare(b.title));
   }, [movies, decade, genre, query, hideWatched, watched]);
 
   const totalWatched = watched.size;

@@ -24,15 +24,21 @@ export default function ScopedTracker({ films, scopeLabel }: Props) {
     if (hydrated) saveWatched(watched);
   }, [watched, hydrated]);
 
+  // Newest first within scope — mirror the home tracker's order.
+  const sorted = useMemo(
+    () => [...films].sort((a, b) => b.year - a.year || a.title.localeCompare(b.title)),
+    [films],
+  );
+
   const watchedHere = useMemo(() => {
     let n = 0;
-    films.forEach((f) => {
+    sorted.forEach((f) => {
       if (watched.has(f.id)) n++;
     });
     return n;
-  }, [films, watched]);
+  }, [sorted, watched]);
 
-  const pct = films.length ? watchedHere / films.length : 0;
+  const pct = sorted.length ? watchedHere / sorted.length : 0;
 
   function toggle(id: string) {
     setWatched((prev) => {
@@ -67,13 +73,13 @@ export default function ScopedTracker({ films, scopeLabel }: Props) {
         </div>
       </header>
 
-      {films.length === 0 ? (
+      {sorted.length === 0 ? (
         <div className="rounded-lg border border-dashed border-[var(--line)] p-10 text-center text-sm text-[var(--muted)]">
           No films match this view.
         </div>
       ) : (
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 md:grid-cols-4 lg:grid-cols-5">
-          {films.map((m) => (
+          {sorted.map((m) => (
             <MovieCard key={m.id} movie={m} watched={watched.has(m.id)} onToggle={toggle} />
           ))}
         </div>
