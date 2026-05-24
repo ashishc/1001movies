@@ -1,0 +1,39 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg: #fafaf7;
+  --fg: #0b0b0f;
+  --muted: #6b7280;
+  --line: #e5e5e0;
+  --accent: #ff5a3c;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0b0b0f;
+    --fg: #f5f5f0;
+    --muted: #9ca3af;
+    --line: #1f1f24;
+  }
+}
+
+html, body {
+  background: var(--bg);
+  color: var(--fg);
+  font-feature-settings: 'ss01', 'cv11';
+  -webkit-font-smoothing: antialiased;
+}
+
+/* hide scrollbar visual noise on the year strip */
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { scrollbar-width: none; }
+
+/* subtle right-edge fade hint that horizontal scroll is available */
+@media (max-width: 640px) {
+  .scroll-fade {
+    -webkit-mask-image: linear-gradient(to right, black 90%, transparent);
+            mask-image: linear-gradient(to right, black 90%, transparent);
+  }
+}

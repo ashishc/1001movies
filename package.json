@@ -1,0 +1,27 @@
+{
+  "name": "1001movies",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "env -u TURBOPACK -u NODE_ENV next dev",
+    "build": "env -u TURBOPACK -u NODE_ENV next build && node scripts/build-sitemap.mjs && node scripts/build-og.mjs",
+    "start": "env -u TURBOPACK -u NODE_ENV next start",
+    "lint": "env -u TURBOPACK -u NODE_ENV next lint",
+    "preprocess": "node scripts/preprocess.mjs",
+    "sitemap": "node scripts/build-sitemap.mjs"
+  },
+  "dependencies": {
+    "next": "14.2.15",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "autoprefixer": "^10.4.20",
+    "postcss": "^8.4.47",
+    "tailwindcss": "^3.4.13",
+    "typescript": "^5.6.3"
+  }
+}
