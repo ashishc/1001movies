@@ -37,9 +37,12 @@ export const metadata: Metadata = {
   robots: { index: true, follow: true },
   alternates: { canonical: SITE_URL },
   icons: {
-    // SVG favicon scales to every density; the browser picks it on modern OS.
-    icon: [{ url: '/favicon.svg', type: 'image/svg+xml' }],
-    apple: '/apple-touch-icon.svg',
+    // Modern browsers prefer SVG (scales to any density); legacy Edge/IE fall back to ICO.
+    icon: [
+      { url: '/favicon.svg', type: 'image/svg+xml' },
+      { url: '/favicon.ico', sizes: 'any' },
+    ],
+    apple: '/apple-touch-icon.png',
   },
 };
 
