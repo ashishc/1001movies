@@ -36,6 +36,11 @@ export const metadata: Metadata = {
   },
   robots: { index: true, follow: true },
   alternates: { canonical: SITE_URL },
+  icons: {
+    // SVG favicon scales to every density; the browser picks it on modern OS.
+    icon: [{ url: '/favicon.svg', type: 'image/svg+xml' }],
+    apple: '/apple-touch-icon.svg',
+  },
 };
 
 export const viewport = {

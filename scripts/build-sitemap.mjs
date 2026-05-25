@@ -40,8 +40,58 @@ ${urls
 </urlset>
 `;
 
-const robots = `User-agent: *
+// robots.txt:
+// - Allow all standard search engine crawlers (we WANT to be indexed)
+// - Block known AI-training scrapers. They take but don't link back; they're
+//   visible in our logs scraping ~25% of all traffic and contribute zero
+//   discoverability. Any bot that respects robots.txt should opt out here.
+//   (ClaudeBot, GoogleOther, etc. all honor robots.txt per their docs.)
+//
+// We deliberately do NOT block GoogleBot, BingBot, DuckDuckBot, or social
+// preview bots (LinkedInBot, Twitterbot, FacebookBot) — those drive humans.
+const robots = `# Search engines: please index everything
+User-agent: *
 Allow: /
+
+# AI training crawlers: thanks but no thanks
+User-agent: GPTBot
+Disallow: /
+
+User-agent: ChatGPT-User
+Disallow: /
+
+User-agent: anthropic-ai
+Disallow: /
+
+User-agent: ClaudeBot
+Disallow: /
+
+User-agent: Claude-Web
+Disallow: /
+
+User-agent: Google-Extended
+Disallow: /
+
+User-agent: GoogleOther
+Disallow: /
+
+User-agent: PerplexityBot
+Disallow: /
+
+User-agent: Perplexity-User
+Disallow: /
+
+User-agent: cohere-ai
+Disallow: /
+
+User-agent: Bytespider
+Disallow: /
+
+User-agent: Amazonbot
+Disallow: /
+
+User-agent: meta-externalagent
+Disallow: /
 
 Sitemap: ${SITE}/sitemap.xml
 `;

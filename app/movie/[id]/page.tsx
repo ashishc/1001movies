@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation';
 import movies from '../../data/movies.json';
 import type { Movie } from '@/lib/types';
 import MovieMarkButton from '@/components/MovieMarkButton';
+import OutboundLink from '@/components/OutboundLink';
 import { genreSlug } from '@/lib/genre-copy';
 import { AMAZON_TAG } from '@/lib/constants';
 
@@ -121,23 +122,23 @@ export default function MoviePage({ params }: { params: { id: string } }) {
 
           <div className="mt-6 flex flex-wrap gap-3">
             <MovieMarkButton id={m.id} />
-            <a
+            <OutboundLink
               href={justWatchUrl(m)}
-              target="_blank"
-              rel="noopener noreferrer sponsored"
+              event="justwatch_click"
+              props={{ movieId: m.id }}
               className="rounded-lg border border-[var(--line)] px-5 py-3 text-sm font-semibold transition hover:border-accent/60"
             >
               Find where to stream →
-            </a>
+            </OutboundLink>
             {amazonUrl(m) && (
-              <a
+              <OutboundLink
                 href={amazonUrl(m)!}
-                target="_blank"
-                rel="noopener noreferrer sponsored"
+                event="amazon_click"
+                props={{ movieId: m.id }}
                 className="rounded-lg border border-[var(--line)] px-5 py-3 text-sm font-semibold transition hover:border-accent/60"
               >
                 Buy on Amazon →
-              </a>
+              </OutboundLink>
             )}
           </div>
 

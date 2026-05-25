@@ -2,6 +2,7 @@
 import { useEffect, useState } from 'react';
 import type { Movie } from '@/lib/types';
 import { makeCard, type ShareTemplate } from '@/lib/sharecard';
+import { track } from '@/lib/track';
 
 type Props = {
   open: boolean;
@@ -34,6 +35,7 @@ export function ShareModal({ open, onClose, watched, movies }: Props) {
       const blob = await (await fetch(dataUrl)).blob();
       // @ts-ignore — ClipboardItem may be missing in older lib.dom
       await navigator.clipboard.write([new ClipboardItem({ 'image/png': blob })]);
+      track('share_copy', { template: tpl });
       setCopied(true);
       setTimeout(() => setCopied(false), 1500);
     } catch {
@@ -42,6 +44,7 @@ export function ShareModal({ open, onClose, watched, movies }: Props) {
   }
 
   function download() {
+    track('share_download', { template: tpl });
     const a = document.createElement('a');
     a.href = dataUrl;
     a.download = `1001movies-${tpl}.png`;

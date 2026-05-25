@@ -6,6 +6,7 @@ import { loadWatched } from '@/lib/storage';
 import { decodeWatched, encodeWatched } from '@/lib/compare';
 import { ShareModal } from '@/components/ShareModal';
 import { makeCard } from '@/lib/sharecard';
+import { track } from '@/lib/track';
 
 type Props = { movies: Movie[] };
 
@@ -36,6 +37,7 @@ export default function CompareClient({ movies }: Props) {
         setTheirs(decodeWatched(movies, vs));
         if (name) setTheirName(name.slice(0, 16));
         setMode('compared');
+        track('compare_visit', { hasName: !!name });
       }
     }
   }, [movies]);
@@ -72,6 +74,7 @@ export default function CompareClient({ movies }: Props) {
 
   function copyShare() {
     navigator.clipboard?.writeText(shareUrl);
+    track('compare_copy_link', {});
     alert('Link copied. Send to a friend; they can paste it back here.');
   }
 

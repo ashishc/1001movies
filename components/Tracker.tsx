@@ -14,6 +14,7 @@ import {
   saveFilters,
 } from '@/lib/storage';
 import { estimatePercentile } from '@/lib/constants';
+import { track } from '@/lib/track';
 import { ProgressRing } from './ProgressRing';
 import { MovieCard } from './MovieCard';
 import { Onboarding } from './Onboarding';
@@ -86,6 +87,7 @@ export default function Tracker({ movies }: Props) {
     if (crossed != null) {
       recordCelebratedMilestone(crossed);
       setMilestone(crossed);
+      track('milestone', { count: crossed });
     }
     prevWatchedSize.current = watched.size;
   }, [watched, hydrated]);
@@ -141,6 +143,7 @@ export default function Tracker({ movies }: Props) {
   function openShare() {
     setMilestone(null);
     setShowShare(true);
+    track('share_open', { source: 'milestone' });
   }
 
   return (
@@ -187,7 +190,10 @@ export default function Tracker({ movies }: Props) {
             </p>
             <div className="mt-2 flex gap-2 text-xs">
               <button
-                onClick={() => setShowShare(true)}
+                onClick={() => {
+                  track('share_open', { source: 'header' });
+                  setShowShare(true);
+                }}
                 className="rounded-full border border-[var(--line)] px-3 py-1 hover:border-accent/60 hover:text-accent"
               >
                 Share
