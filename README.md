@@ -1,15 +1,15 @@
 # 1001 Movies — The Cinephile Canon, Tracked
 
 > How many of the greatest movies of all time have you actually seen?
-> 1,085 essential films across every decade, ranked by Letterboxd. Free, no signup.
+> 1,122 essential films across every decade, ranked by 800k+ TMDB users. Free, no signup.
 
 Live at **https://1001movies.app**.
 
 ## What this is
 
 An interactive tracker for the most-loved films of every decade (1900s through 2020s),
-sourced from Letterboxd's per-decade popularity ranking and enriched with director,
-genre, runtime, description, and high-resolution posters from TMDB.
+sourced from TMDB's audience ratings — high average score combined with a minimum
+vote count per era so niche-fanbase outliers don't outrank canonical works.
 
 The site uses the famous "1001 Movies You Must See Before You Die" book name as its
 brand, but its data is live and community-validated rather than the frozen 2014 book canon.
@@ -41,16 +41,16 @@ auto-deploy in ~90 seconds.
 
 ## Refreshing the dataset
 
-The site's canon is rebuilt from Letterboxd + TMDB. Run this on or around the 1st
-of each month to keep the data current:
+The site's canon is rebuilt from TMDB. Run this on or around the 1st of each month
+to keep the data current:
 
 ```bash
 TMDB_TOKEN=eyJ... npm run refresh
 ```
 
 What it does:
-1. Re-scrapes Letterboxd's per-decade popularity pages via the microbrowser
-2. Re-enriches all titles via TMDB
+1. Re-pulls each decade's most-loved films via TMDB's `/discover/movie` endpoint
+2. Enriches each film with director / genre / runtime / description / poster
 3. Writes `app/data/movies.json`
 4. Prints a diff (films added / removed)
 
@@ -60,13 +60,13 @@ You then `git add`, `git commit`, `git push` after reviewing.
 
 ```
 app/
-  data/movies.json          # the canon (1,085 films, regenerated monthly)
+  data/movies.json          # the canon (1,122 films, regenerated monthly)
   page.tsx                  # /  — main tracker
   stats/                    # /stats  — percentile, decade heatmap, taste profile
   compare/                  # /compare  — share-link friend comparison
   decade/[slug]/            # /decade/2020s, /decade/1970s, ... (13 SEO pages)
   genre/[slug]/             # /genre/horror, /genre/drama, ... (18 SEO pages)
-  movie/[id]/               # /movie/oppenheimer-2023, ... (1,085 SEO pages)
+  movie/[id]/               # /movie/oppenheimer-2023, ... (1,122 SEO pages)
   about/                    # /about  — methodology, EEAT
 components/
   Tracker.tsx               # the main interactive grid
@@ -74,7 +74,7 @@ components/
   ShareModal.tsx            # 4 canvas-rendered share-card templates
   Onboarding.tsx            # first-visit modal w/ endowed-progress 5 pre-ticked
   Confetti.tsx              # milestone celebration
-  MilestoneModal.tsx        # 10/25/50/100/250/500/750/1000/1085
+  MilestoneModal.tsx        # 10/25/50/100/250/500/750/1000/1122
   UpNext.tsx                # 3 most-recent unwatched films
   ...
 lib/
@@ -85,7 +85,7 @@ lib/
   track.ts                  # event tracking shim (Plausible-compatible, no-op fallback)
   constants.ts              # MILESTONES, ENDOWED_TITLES, percentile fn, AMAZON_TAG
 scripts/
-  scrape-letterboxd.mjs     # microbrowser-driven monthly scrape
+  fetch-tmdb-canon.mjs      # pulls per-decade canon from TMDB's /discover endpoint
   enrich-tmdb.mjs           # adds director/genre/runtime/desc/poster
   refresh-data.mjs          # one-shot wrapper for both above
   build-sitemap.mjs         # writes out/sitemap.xml + out/robots.txt

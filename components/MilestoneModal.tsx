@@ -18,7 +18,7 @@ const FLAVOR: Record<number, { title: string; sub: string }> = {
   500: { title: 'Halfway there.', sub: 'Five hundred films of cinema history, ticked.' },
   750: { title: 'Three quarters.', sub: 'You see things most people only read about.' },
   1000: { title: 'A thousand.', sub: 'A round number for a remarkable obsession.' },
-  1149: { title: 'Completed.', sub: 'You have watched the entire 1001 canon. Now what?' },
+  1122: { title: 'Completed.', sub: 'You have watched the entire 1001 canon. Now what?' },
 };
 
 export function MilestoneModal({ threshold, totalWatched, total, onClose, onShare }: Props) {

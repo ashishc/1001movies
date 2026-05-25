@@ -1,4 +1,4 @@
-// Enriches scripts/letterboxd-flat.json with director/genre/runtime/description from TMDB.
+// Enriches scripts/tmdb-canon-flat.json with director/genre/runtime/description from TMDB.
 // TMDB has a free API. To run, get a free read-access token at:
 //   https://www.themoviedb.org/settings/api  ("API Read Access Token")
 // Then export TMDB_TOKEN=... before running this script.
@@ -19,7 +19,7 @@ if (!TOKEN) {
   process.exit(1);
 }
 
-const FLAT = path.join(__dirname, 'letterboxd-flat.json');
+const FLAT = path.join(__dirname, 'tmdb-canon-flat.json');
 const CACHE = path.join(__dirname, 'tmdb-cache.json');
 const OUT = path.join(ROOT, 'app/data/movies.json');
 
@@ -74,12 +74,15 @@ async function getDetails(tmdbId) {
 async function enrichFilm(film) {
   if (cache[film.id]) return { ...film, ...cache[film.id] };
 
-  let tmdbId;
-  try {
-    tmdbId = await findTmdbId(film.title, film.year);
-  } catch (e) {
-    console.warn(`  search failed for ${film.title}: ${e.message}`);
-    return film;
+  // The TMDB-sourced flat already includes tmdbId — skip the search.
+  let tmdbId = film.tmdbId;
+  if (!tmdbId) {
+    try {
+      tmdbId = await findTmdbId(film.title, film.year);
+    } catch (e) {
+      console.warn(`  search failed for ${film.title}: ${e.message}`);
+      return film;
+    }
   }
   if (!tmdbId) return film;
 
@@ -96,7 +99,8 @@ async function enrichFilm(film) {
   const genre = pickGenre(d.genres || []);
   const runtime = formatRuntime(d.runtime);
   const description = d.overview || '';
-  // Prefer a higher-res TMDB poster over the small Letterboxd thumbnail.
+  // Prefer the higher-res poster from /movie/{id} (which has size flexibility)
+  // over whatever was captured during the discover/search step.
   const poster = d.poster_path
     ? `https://image.tmdb.org/t/p/w500${d.poster_path}`
     : film.poster;
@@ -132,7 +136,7 @@ async function main() {
       description: f.description || '',
       poster: f.poster || '',
       runtime: f.runtime || '',
-      rating: f.rating, // Letterboxd weighted average
+      rating: f.rating, // TMDB audience rating, 0–10 scale
     }))
     .sort((a, b) => a.year - b.year || a.title.localeCompare(b.title));
 

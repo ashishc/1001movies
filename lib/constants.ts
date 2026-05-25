@@ -9,7 +9,8 @@ export const ENDOWED_TITLES: Array<{ titleStartsWith: string; year: number }> = 
 ];
 
 // Milestone thresholds (count of watched). Each triggers a celebration.
-export const MILESTONES = [10, 25, 50, 100, 250, 500, 750, 1000, 1149];
+// Final milestone tracks the actual total in app/data/movies.json — bump on refresh.
+export const MILESTONES = [10, 25, 50, 100, 250, 500, 750, 1000, 1122];
 
 export const SITE_URL = 'https://1001movies.app';
 export const SITE_NAME = '1001 Movies';

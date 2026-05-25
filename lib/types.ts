@@ -7,6 +7,6 @@ export type Movie = {
   description: string;
   poster: string;
   runtime: string;
-  /** Letterboxd weighted-average rating (0–5). Optional for forward-compat. */
+  /** TMDB audience rating, 0–10 scale. Optional for forward-compat. */
   rating?: number;
 };

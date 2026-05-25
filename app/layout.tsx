@@ -5,7 +5,7 @@ import { SiteShell } from '@/components/SiteShell';
 const SITE_URL = 'https://1001movies.app';
 const SITE_TITLE = '1001 Movies — The Cinephile Canon, Tracked';
 const SITE_DESC =
-  'Track your progress through the cinephile canon — the highest-rated films of every decade according to 14M+ Letterboxd users. Check off films, see your % complete, share. Free, no signup.';
+  'Track your progress through the cinephile canon — the highest-rated films of every decade, ranked by 800k+ TMDB users. Check off films, see your % complete, share. Free, no signup.';
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),

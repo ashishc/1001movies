@@ -23,27 +23,30 @@ export default function AboutPage() {
           <h2 className="font-display text-lg font-semibold">The canon</h2>
           <p>
             This list is a living, community-validated cinephile canon. Roughly{' '}
-            <strong>1,000 films</strong> across thirteen decades (1900s through 2020s), each chosen
-            by Letterboxd's per-decade popularity ranking — a function of how many people have
-            watched a film and how highly they rate it.
+            <strong>1,100 films</strong> across thirteen decades (1900s through 2020s), each chosen
+            by TMDB's per-decade rating among films with significant audience engagement —
+            high average rating combined with a minimum number of votes calibrated per era,
+            so niche-fanbase outliers don't crowd out the canonical works.
           </p>
           <p>
             The site name "1001 Movies" honours the well-known book series of the same name, which
-            popularised the idea of a canonical film list. Our data, however, comes from
-            Letterboxd. The two overlap heavily but not perfectly — we lean more recent and slightly
-            more populist. That's deliberate.
+            popularised the idea of a canonical film list. Our data is community-rated and
+            refreshed monthly, so the list stays current — the 2020s grow as voting catches up
+            to recent releases.
           </p>
         </section>
 
         <section>
           <h2 className="font-display text-lg font-semibold">Methodology</h2>
           <p>
-            We scrape Letterboxd's public per-decade popularity pages monthly, polite and slow.
-            Each decade contributes a number of films calibrated to its canonical density — fewer
-            silents (where many works are lost), more 1970s (the New Hollywood peak), a smaller
-            2020s while the decade is still in progress. After scraping, every film is enriched
-            with director, runtime, genre, description, and high-resolution poster from{' '}
-            <a href="https://www.themoviedb.org" target="_blank" rel="noopener noreferrer" className="underline hover:text-accent">TMDB</a>.
+            We pull each decade's most-loved films via{' '}
+            <a href="https://www.themoviedb.org" target="_blank" rel="noopener noreferrer" className="underline hover:text-accent">TMDB</a>'s
+            public API, sorted by audience rating and filtered by minimum vote count
+            (so a film with five passionate fans doesn't outrank Citizen Kane). Each decade
+            contributes a number of films calibrated to its canonical density — fewer silents
+            (where many works are lost), more 1970s (the New Hollywood peak), a smaller 2020s
+            while the decade is still in progress. Director, runtime, genre, description, and
+            high-resolution posters all come from TMDB too.
           </p>
         </section>
 

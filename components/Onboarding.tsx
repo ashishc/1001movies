@@ -32,7 +32,7 @@ export function Onboarding({ open, preTickedCount, onClose }: Props) {
         </h2>
         <p className="mt-4 text-sm text-[var(--muted)]">
           The cinephile canon — the most-loved films of every decade, ranked by{' '}
-          <a href="https://letterboxd.com" target="_blank" rel="noopener noreferrer" className="underline hover:text-accent">Letterboxd</a> users.
+          <a href="https://www.themoviedb.org" target="_blank" rel="noopener noreferrer" className="underline hover:text-accent">TMDB</a> users.
           Tap any poster you've watched. Progress lives on this device — no signup, no email.
         </p>
         <div className="my-5 rounded-lg border border-[var(--line)] bg-black/[0.02] p-3 text-left text-sm dark:bg-white/[0.03]">
@@ -51,7 +51,7 @@ export function Onboarding({ open, preTickedCount, onClose }: Props) {
           Begin
         </button>
         <p className="mt-3 text-[11px] text-[var(--muted)]">
-          1,085 films · 18 genres · 13 decades · 1902 – present
+          1,122 films · 18 genres · 13 decades · 1904 – present
         </p>
       </div>
     </div>

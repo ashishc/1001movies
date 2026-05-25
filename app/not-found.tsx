@@ -28,7 +28,7 @@ export default function NotFound() {
         >
           <p className="font-display text-base font-semibold">Tracker →</p>
           <p className="mt-1 text-xs text-[var(--muted)]">
-            All 1,085 films. Tap to mark watched.
+            All 1,122 films. Tap to mark watched.
           </p>
         </Link>
         <Link

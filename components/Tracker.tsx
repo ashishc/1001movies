@@ -192,7 +192,7 @@ export default function Tracker({ movies }: Props) {
             1001 Movies <span className="text-accent">·</span> Tracker
           </h1>
           <p className="mt-2 max-w-xl text-sm text-[var(--muted)] sm:text-base">
-            The cinephile canon — the most-loved films of every decade, ranked by Letterboxd.
+            The cinephile canon — the most-loved films of every decade, ranked by 800k+ TMDB users.
             Tap a poster to mark it watched. Progress saves on this device.
           </p>
         </div>

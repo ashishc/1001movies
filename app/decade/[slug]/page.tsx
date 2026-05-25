@@ -150,10 +150,10 @@ export default function DecadePage({ params }: { params: { slug: string } }) {
       <section className="mt-10 max-w-3xl">
         <h2 className="mb-3 font-display text-xl font-semibold">How this list is ranked</h2>
         <p className="text-sm leading-relaxed text-[var(--muted)]">
-          This is the {films.length} most-loved {slug} films according to{' '}
-          <a href="https://letterboxd.com" target="_blank" rel="noopener noreferrer" className="underline hover:text-accent">Letterboxd</a>'s
-          per-decade popularity ranking — a function of how many people have watched each film and
-          how highly they rate it. We refresh the list monthly so it stays current.
+          The {films.length} most-loved {slug} films, ranked by audience rating on{' '}
+          <a href="https://www.themoviedb.org" target="_blank" rel="noopener noreferrer" className="underline hover:text-accent">TMDB</a>{' '}
+          and filtered by minimum vote count so a small fanbase can't outrank canonical works.
+          We refresh the list monthly so it stays current.{' '}
           See <Link href="/about" className="underline hover:text-accent">our methodology</Link> for the full picture.
         </p>
       </section>

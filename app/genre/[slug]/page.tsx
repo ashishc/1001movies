@@ -147,11 +147,10 @@ export default function GenrePage({ params }: { params: { slug: string } }) {
         <h2 className="mb-3 font-display text-xl font-semibold">How this list is ranked</h2>
         <p className="text-sm leading-relaxed text-[var(--muted)]">
           The {films.length} most-loved {genre.toLowerCase()} films from the cinephile canon, ranked
-          by{' '}
-          <a href="https://letterboxd.com" target="_blank" rel="noopener noreferrer" className="underline hover:text-accent">Letterboxd</a>'s
-          per-decade popularity (which weights both rating and watch count, so niche-fanbase
-          outliers don't dominate). Refreshed monthly.
-          See <Link href="/about" className="underline hover:text-accent">our methodology</Link>.
+          by audience rating on{' '}
+          <a href="https://www.themoviedb.org" target="_blank" rel="noopener noreferrer" className="underline hover:text-accent">TMDB</a>{' '}
+          and filtered by minimum vote count so niche-fanbase outliers don't dominate. Refreshed
+          monthly. See <Link href="/about" className="underline hover:text-accent">our methodology</Link>.
         </p>
       </section>
 

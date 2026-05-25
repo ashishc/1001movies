@@ -1,18 +1,16 @@
-// Convenience wrapper: re-scrape Letterboxd + re-enrich via TMDB + commit.
+// Convenience wrapper: re-fetch the canon from TMDB + enrich + diff.
 // Run this locally on or around the 1st of each month so the canon stays fresh.
 //
 // Requires:
-//   - microbrowser running at localhost:3010 (for the Letterboxd scrape)
-//   - TMDB_TOKEN env var (for enrichment)
+//   - TMDB_TOKEN env var
 //
 // Usage:
 //   TMDB_TOKEN=eyJ... node scripts/refresh-data.mjs
 //
 // What it does:
-//   1. Backs up the current cache so we can diff
-//   2. Re-runs scrape-letterboxd.mjs (writes scripts/letterboxd-flat.json)
-//   3. Re-runs enrich-tmdb.mjs (writes app/data/movies.json)
-//   4. Prints a summary of what changed (films added/removed)
+//   1. Re-runs fetch-tmdb-canon.mjs (writes scripts/tmdb-canon-flat.json)
+//   2. Re-runs enrich-tmdb.mjs (writes app/data/movies.json)
+//   3. Prints a summary of what changed (films added/removed)
 //
 // You then commit + push manually after reviewing the diff.
 
@@ -52,17 +50,15 @@ async function main() {
   const beforeIds = new Set(before.map((m) => m.id));
   console.log(`Before: ${before.length} films`);
 
-  // Force re-scrape: nuke just the cache that the scraper checks against.
-  // (The script skips decades whose count >= target; clearing forces a refresh.)
-  const cachePath = path.join(__dirname, 'letterboxd-cache.json');
+  // Backup the enrichment cache so we can roll back if something looks wrong.
+  const cachePath = path.join(__dirname, 'tmdb-cache.json');
   if (fs.existsSync(cachePath)) {
-    const backup = path.join(__dirname, `letterboxd-cache.${Date.now()}.bak.json`);
+    const backup = path.join(__dirname, `tmdb-cache.${Date.now()}.bak.json`);
     fs.copyFileSync(cachePath, backup);
-    fs.unlinkSync(cachePath);
-    console.log(`Backed up old cache to ${path.basename(backup)}`);
+    console.log(`Backed up enrichment cache to ${path.basename(backup)}`);
   }
 
-  await run('node', ['scripts/scrape-letterboxd.mjs']);
+  await run('node', ['scripts/fetch-tmdb-canon.mjs']);
   await run('node', ['scripts/enrich-tmdb.mjs']);
 
   const after = readMovies();
@@ -80,7 +76,7 @@ async function main() {
   if (removed.length > 20) console.log(`  … and ${removed.length - 20} more`);
 
   console.log('\n✓ Done. Review the diff, then:');
-  console.log('  git add app/data/movies.json scripts/letterboxd-cache.json scripts/tmdb-cache.json');
+  console.log('  git add app/data/movies.json scripts/tmdb-canon-flat.json scripts/tmdb-cache.json');
   console.log('  git commit -m "Refresh canon for [Month YYYY]"');
   console.log('  git push');
 }

@@ -60,7 +60,7 @@ export const DECADE_COPY: Record<string, { headline: string; intro: string }> = 
   '2010s': {
     headline: 'Streaming, and the long tail',
     intro:
-      'The decade peer-to-peer made cinephilia global, where Korean cinema took over the conversation, where Marvel made every other studio play catch-up. Parasite, Whiplash, Mad Max: Fury Road, La La Land, Moonlight. The 2010s in the canon is the first decade shaped as much by Letterboxd as by critics.',
+      'The decade streaming made cinephilia global, where Korean cinema took over the conversation, where Marvel made every other studio play catch-up. Parasite, Whiplash, Mad Max: Fury Road, La La Land, Moonlight. The 2010s in the canon is the first decade where audience taste and critic taste really started to diverge — and the gap widened every year since.',
   },
   '2020s': {
     headline: 'Mid-decade, and the canon is still settling',
