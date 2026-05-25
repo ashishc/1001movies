@@ -14,9 +14,11 @@ export const MILESTONES = [10, 25, 50, 100, 250, 500, 750, 1000, 1149];
 export const SITE_URL = 'https://1001movies.app';
 export const SITE_NAME = '1001 Movies';
 
-// Amazon Associates tracking ID. Replace with your real one (looks like 'yourname-20').
-// Until set, Amazon links are hidden on movie pages.
-export const AMAZON_TAG = process.env.NEXT_PUBLIC_AMAZON_TAG || '';
+// Amazon Associates tracking ID. Hardcoded because Cloudflare Pages env var
+// inlining for NEXT_PUBLIC_* was being flaky. Affiliate IDs are not secret —
+// they appear in every affiliate URL anyway, so committing this is safe.
+// To override, still set NEXT_PUBLIC_AMAZON_TAG (env wins over default).
+export const AMAZON_TAG = process.env.NEXT_PUBLIC_AMAZON_TAG || 'ashishc-20';
 
 // Estimated percentile lookup. Based on a rough power-law approximation of how many users
 // reach each count (most users plateau at <50; few reach 250+). Updated periodically as we
