@@ -19,11 +19,19 @@ export const SITE_NAME = '1001 Movies';
 export const AMAZON_TAG = process.env.NEXT_PUBLIC_AMAZON_TAG || '';
 
 // Estimated percentile lookup. Based on a rough power-law approximation of how many users
-// reach each count (most users plateau at <50; few reach 250+). Updated periodically.
-// Returns a string like "73% of trackers".
-export function estimatePercentile(watchedCount: number, total = 1149): string {
-  // Smooth curve: small counts beat very few people; high counts beat almost everyone.
-  // 0 → 0%, 10 → 18%, 50 → 55%, 100 → 73%, 250 → 91%, 500 → 98%, 1000+ → 99.9%
+// reach each count (most users plateau at <50; few reach 250+). Updated periodically as we
+// gather real data. Returns a string like "73% of trackers".
+//
+// Curve: 1 - exp(-n/120). Tuned so:
+//   0   → 0%       (we hide the brag line in this case)
+//   10  → 8%
+//   50  → 34%
+//   100 → 56%
+//   250 → 88%
+//   500 → 98%
+//   1000+ → 99.9%
+export function estimatePercentile(watchedCount: number): string {
+  if (watchedCount <= 0) return '0%';
   const pct = Math.min(99.9, 100 * (1 - Math.exp(-watchedCount / 120)));
   return `${pct.toFixed(pct >= 99 ? 1 : 0)}%`;
 }

@@ -21,6 +21,7 @@ const urls = [
   '',
   '/stats',
   '/compare',
+  '/random',
   '/about',
   ...decades.map((d) => `/decade/${d}`),
   ...genres.map((g) => `/genre/${g}`),

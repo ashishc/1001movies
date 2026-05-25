@@ -16,6 +16,7 @@ export function SiteShell({ children }: { children: ReactNode }) {
             1001 Movies
           </Link>
           <nav className="flex items-center gap-4 text-[13px] text-[var(--muted)]">
+            <Link href="/random" className="hover:text-accent">🎲 Random</Link>
             <Link href="/stats" className="hover:text-accent">Stats</Link>
             <Link href="/compare" className="hover:text-accent">Compare</Link>
             <Link href="/decade/1970s" className="hidden hover:text-accent sm:inline">By decade</Link>

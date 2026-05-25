@@ -135,6 +135,24 @@ export default function Tracker({ movies }: Props) {
     prevWatchedSize.current = 0;
   }
 
+  function bulkMarkVisible() {
+    const unwatchedVisible = filtered.filter((m) => !watched.has(m.id));
+    if (unwatchedVisible.length === 0) return;
+    if (
+      !confirm(
+        `Mark all ${unwatchedVisible.length} films currently shown as watched? You can undo individual ticks afterward.`,
+      )
+    )
+      return;
+    setWatched((prev) => {
+      const next = new Set(prev);
+      unwatchedVisible.forEach((m) => next.add(m.id));
+      bumpStreak();
+      return next;
+    });
+    track('bulk_mark', { count: unwatchedVisible.length });
+  }
+
   function closeOnboarding() {
     markOnboarded();
     setShowOnboarding(false);
@@ -185,9 +203,15 @@ export default function Tracker({ movies }: Props) {
               {totalWatched.toLocaleString()}{' '}
               <span className="text-[var(--muted)]">/ {totalMovies.toLocaleString()}</span>
             </div>
-            <p className="mt-1 text-xs text-[var(--muted)]">
-              Ahead of {estimatePercentile(totalWatched)} of trackers
-            </p>
+            {totalWatched > 0 ? (
+              <p className="mt-1 text-xs text-[var(--muted)]">
+                Ahead of {estimatePercentile(totalWatched)} of trackers
+              </p>
+            ) : (
+              <p className="mt-1 text-xs text-[var(--muted)]">
+                Tap a poster to start.
+              </p>
+            )}
             <div className="mt-2 flex gap-2 text-xs">
               <button
                 onClick={() => {
@@ -280,9 +304,19 @@ export default function Tracker({ movies }: Props) {
         </div>
       </div>
 
-      {/* Result counter */}
-      <div className="mb-4 text-xs text-[var(--muted)]">
-        Showing {filtered.length.toLocaleString()} of {totalMovies.toLocaleString()} films
+      {/* Result counter + bulk action */}
+      <div className="mb-4 flex flex-wrap items-center justify-between gap-2 text-xs text-[var(--muted)]">
+        <span>
+          Showing {filtered.length.toLocaleString()} of {totalMovies.toLocaleString()} films
+        </span>
+        {(decade !== 'all' || genre !== 'all' || query.trim()) && filtered.some((m) => !watched.has(m.id)) && (
+          <button
+            onClick={bulkMarkVisible}
+            className="rounded-full border border-[var(--line)] px-3 py-1 transition hover:border-accent/60 hover:text-accent"
+          >
+            Mark all shown as watched
+          </button>
+        )}
       </div>
 
       {/* Grid */}

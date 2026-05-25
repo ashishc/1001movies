@@ -33,6 +33,21 @@ export default function GenrePage({ params }: { params: { slug: string } }) {
   const copy = GENRE_COPY[genre];
   const films = (movies as unknown as Movie[]).filter((m) => m.genre === genre);
 
+  // Genre in numbers: highest-rated, top directors, decade spread
+  const top3 = [...films].sort((a, b) => (b.rating ?? 0) - (a.rating ?? 0)).slice(0, 3);
+  const directorCounts: Record<string, number> = {};
+  films.forEach((f) => { if (f.director) directorCounts[f.director] = (directorCounts[f.director] || 0) + 1; });
+  const topDirectors = Object.entries(directorCounts)
+    .filter(([, n]) => n >= 2)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 5);
+  const decadeCounts: Record<string, number> = {};
+  films.forEach((f) => {
+    const d = `${Math.floor(f.year / 10) * 10}s`;
+    decadeCounts[d] = (decadeCounts[d] || 0) + 1;
+  });
+  const topDecades = Object.entries(decadeCounts).sort((a, b) => b[1] - a[1]).slice(0, 4);
+
   const ld = {
     '@context': 'https://schema.org',
     '@type': 'ItemList',
@@ -71,6 +86,74 @@ export default function GenrePage({ params }: { params: { slug: string } }) {
       </header>
 
       <ScopedTracker films={films} scopeLabel={genre} />
+
+      {/* Genre in numbers */}
+      <section className="mt-12 border-t border-[var(--line)] pt-8">
+        <h2 className="mb-5 font-display text-xl font-semibold">{genre} in numbers</h2>
+        <div className="grid gap-6 sm:grid-cols-3">
+          <div>
+            <p className="font-display text-[11px] uppercase tracking-[0.2em] text-[var(--muted)]">
+              Highest-rated
+            </p>
+            <ol className="mt-2 space-y-2 text-sm">
+              {top3.map((m, i) => (
+                <li key={m.id}>
+                  <Link href={`/movie/${m.id}`} className="font-medium hover:text-accent">
+                    {i + 1}. {m.title}
+                  </Link>
+                  <span className="ml-1 text-xs text-[var(--muted)]">
+                    ({m.year}){m.rating ? ` · ${m.rating.toFixed(2)}` : ''}
+                  </span>
+                </li>
+              ))}
+            </ol>
+          </div>
+          {topDirectors.length > 0 && (
+            <div>
+              <p className="font-display text-[11px] uppercase tracking-[0.2em] text-[var(--muted)]">
+                Most-canonised directors
+              </p>
+              <ol className="mt-2 space-y-2 text-sm">
+                {topDirectors.map(([name, n]) => (
+                  <li key={name}>
+                    <span className="font-medium">{name}</span>
+                    <span className="ml-1 text-xs text-[var(--muted)]">· {n} films</span>
+                  </li>
+                ))}
+              </ol>
+            </div>
+          )}
+          <div>
+            <p className="font-display text-[11px] uppercase tracking-[0.2em] text-[var(--muted)]">
+              Decade spread
+            </p>
+            <ul className="mt-2 space-y-2 text-sm">
+              {topDecades.map(([d, n]) => (
+                <li key={d}>
+                  <Link href={`/decade/${d}`} className="font-medium hover:text-accent">
+                    {d}
+                  </Link>
+                  <span className="ml-1 text-xs text-[var(--muted)]">
+                    · {n} films · {Math.round((n / films.length) * 100)}%
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section className="mt-10 max-w-3xl">
+        <h2 className="mb-3 font-display text-xl font-semibold">How this list is ranked</h2>
+        <p className="text-sm leading-relaxed text-[var(--muted)]">
+          The {films.length} most-loved {genre.toLowerCase()} films from the cinephile canon, ranked
+          by{' '}
+          <a href="https://letterboxd.com" target="_blank" rel="noopener noreferrer" className="underline hover:text-accent">Letterboxd</a>'s
+          per-decade popularity (which weights both rating and watch count, so niche-fanbase
+          outliers don't dominate). Refreshed monthly.
+          See <Link href="/about" className="underline hover:text-accent">our methodology</Link>.
+        </p>
+      </section>
 
       <section className="mt-12 border-t border-[var(--line)] pt-6">
         <h2 className="mb-3 font-display text-sm uppercase tracking-wider text-[var(--muted)]">
