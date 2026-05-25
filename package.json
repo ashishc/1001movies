@@ -11,7 +11,8 @@
     "start": "env -u TURBOPACK -u NODE_ENV next start",
     "lint": "env -u TURBOPACK -u NODE_ENV next lint",
     "preprocess": "node scripts/preprocess.mjs",
-    "sitemap": "node scripts/build-sitemap.mjs"
+    "sitemap": "node scripts/build-sitemap.mjs",
+    "refresh": "node scripts/refresh-data.mjs"
   },
   "dependencies": {
     "next": "14.2.15",
