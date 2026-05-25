@@ -36,6 +36,12 @@ export const metadata: Metadata = {
   },
   robots: { index: true, follow: true },
   alternates: { canonical: SITE_URL },
+  // Google Search Console site ownership verification
+  // (HTML-tag method; equivalent to the file method but works around
+  // Cloudflare Pages' .html URL stripping.)
+  verification: {
+    google: '4uFMioDU3C4EHGvt_kD7u4vNYMudvEEBPXCmRzxnm6M',
+  },
   icons: {
     // Modern browsers prefer SVG (scales to any density); legacy Edge/IE fall back to ICO.
     icon: [
